@@ -1,0 +1,19 @@
+Sub createFiles()
+Dim path As String, fileName As String, fileType As String, fullName As String
+Dim lastRow As Long, i As Long, dotPosition As Long
+Dim fso As Object
+path = "C:****" 'Specify the folder path here. Without the final slash it does an append to the file name
+Set fso = CreateObject("Scripting.FileSystemObject")
+With ActiveSheet 
+lastRow = .Cells(.Rows.Count, "D").End(xlUp).Row 'column with the file names in it
+For i = 6 To lastRow 'The row in which the first file name to be created is found
+fullName = .Cells(i, "D").Value 'Get the full file name and type
+dotPosition = InStrRev(fullName, ".") 'Find the position of the last dot
+fileName = Left(fullName, dotPosition - 1) 'Get the file name by taking the characters to the left of the last dot
+fileType = Right(fullName, Len(fullName) - dotPosition) 'Get the file type by taking the characters to the right of the last dot which are the file extentions
+fullName = path & fileName & "." & fileType 'Create the full file name and type
+fso.CreateTextFile fullName 'Creation of the files
+Next i
+End With
+Set fso = Nothing
+End Sub
